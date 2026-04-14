@@ -82,15 +82,19 @@ let langToggle;
 let navToggle;
 let navMenu;
 
-const roles = ['Senior QA Engineer', 'QA Lead', 'Test Manager'];
+const rolesByLang = {
+  de: ['Senior QA Engineer', 'QA Leitung', 'Testmanager'],
+  en: ['Senior QA Engineer', 'QA Lead', 'Test Manager']
+};
 
 let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 let currentLang = localStorage.getItem('lang') || 'de';
+let currentRoles = rolesByLang[currentLang];
 
 function typeRole() {
-  const role = roles[roleIndex];
+  const role = currentRoles[roleIndex];
   if (isDeleting) {
     charIndex -= 1;
   } else {
@@ -107,7 +111,7 @@ function typeRole() {
 
   if (isDeleting && charIndex === 0) {
     isDeleting = false;
-    roleIndex = (roleIndex + 1) % roles.length;
+    roleIndex = (roleIndex + 1) % currentRoles.length;
   }
 
   setTimeout(typeRole, isDeleting ? 55 : 95);
@@ -124,12 +128,22 @@ function t(key) {
 }
 
 function applyLanguage() {
+  currentRoles = rolesByLang[currentLang] || rolesByLang.de;
   document.documentElement.lang = currentLang;
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);
   });
   localStorage.setItem('lang', currentLang);
   langToggle.textContent = currentLang === 'de' ? 'EN' : 'DE';
+}
+
+function resetTypewriter() {
+  roleIndex = 0;
+  charIndex = 0;
+  isDeleting = false;
+  if (roleEl) {
+    roleEl.textContent = '';
+  }
 }
 
 function setupReveal() {
@@ -178,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
   langToggle?.addEventListener('click', () => {
     currentLang = currentLang === 'de' ? 'en' : 'de';
     applyLanguage();
+    resetTypewriter();
   });
 
   const preferredTheme = localStorage.getItem('theme') || 'light';

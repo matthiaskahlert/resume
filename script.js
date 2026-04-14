@@ -75,12 +75,12 @@ const i18nJson = `
 
 const translations = JSON.parse(i18nJson);
 
-const nameEl = document.getElementById('heroName');
-const roleEl = document.getElementById('roleTypewriter');
-const themeToggle = document.getElementById('themeToggle');
-const langToggle = document.getElementById('langToggle');
-const navToggle = document.querySelector('.nav-toggle');
-const navMenu = document.getElementById('nav-menu');
+let nameEl;
+let roleEl;
+let themeToggle;
+let langToggle;
+let navToggle;
+let navMenu;
 
 const roles = ['Senior QA Engineer', 'QA Lead', 'Test Manager'];
 
@@ -91,7 +91,12 @@ let currentLang = localStorage.getItem('lang') || 'de';
 
 function typeRole() {
   const role = roles[roleIndex];
-  const next = isDeleting ? role.slice(0, --charIndex) : role.slice(0, ++charIndex);
+  if (isDeleting) {
+    charIndex -= 1;
+  } else {
+    charIndex += 1;
+  }
+  const next = role.slice(0, charIndex);
   roleEl.textContent = next;
 
   if (!isDeleting && charIndex === role.length) {
@@ -124,7 +129,7 @@ function applyLanguage() {
     node.textContent = t(node.dataset.i18n);
   });
   localStorage.setItem('lang', currentLang);
-  langToggle.textContent = currentLang === 'de' ? 'DE/EN' : 'EN/DE';
+  langToggle.textContent = currentLang === 'de' ? 'EN' : 'DE';
 }
 
 function setupReveal() {
@@ -152,25 +157,34 @@ function setupMouseReactiveBg() {
   });
 }
 
-navToggle?.addEventListener('click', () => {
-  const open = navMenu.classList.toggle('open');
-  navToggle.setAttribute('aria-expanded', String(open));
-});
+document.addEventListener('DOMContentLoaded', () => {
+  nameEl = document.getElementById('heroName');
+  roleEl = document.getElementById('roleTypewriter');
+  themeToggle = document.getElementById('themeToggle');
+  langToggle = document.getElementById('langToggle');
+  navToggle = document.querySelector('.nav-toggle');
+  navMenu = document.getElementById('nav-menu');
 
-themeToggle?.addEventListener('click', () => {
-  const nextTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  applyTheme(nextTheme);
-});
+  navToggle?.addEventListener('click', () => {
+    const open = navMenu.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
 
-langToggle?.addEventListener('click', () => {
-  currentLang = currentLang === 'de' ? 'en' : 'de';
+  themeToggle?.addEventListener('click', () => {
+    const nextTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+  });
+
+  langToggle?.addEventListener('click', () => {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    applyLanguage();
+  });
+
+  const preferredTheme = localStorage.getItem('theme') || 'light';
+  applyTheme(preferredTheme);
   applyLanguage();
+  setupReveal();
+  setupMouseReactiveBg();
+  setTimeout(() => nameEl?.classList.add('ready'), 120);
+  typeRole();
 });
-
-const preferredTheme = localStorage.getItem('theme') || 'light';
-applyTheme(preferredTheme);
-applyLanguage();
-setupReveal();
-setupMouseReactiveBg();
-setTimeout(() => nameEl?.classList.add('ready'), 120);
-typeRole();

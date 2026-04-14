@@ -92,6 +92,7 @@ let charIndex = 0;
 let isDeleting = false;
 let currentLang = localStorage.getItem('lang') || 'de';
 let currentRoles = rolesByLang[currentLang];
+let typewriterTimeoutId;
 
 function typeRole() {
   const role = currentRoles[roleIndex];
@@ -105,7 +106,7 @@ function typeRole() {
 
   if (!isDeleting && charIndex === role.length) {
     isDeleting = true;
-    setTimeout(typeRole, 1200);
+    typewriterTimeoutId = setTimeout(typeRole, 1200);
     return;
   }
 
@@ -114,7 +115,7 @@ function typeRole() {
     roleIndex = (roleIndex + 1) % currentRoles.length;
   }
 
-  setTimeout(typeRole, isDeleting ? 55 : 95);
+  typewriterTimeoutId = setTimeout(typeRole, isDeleting ? 55 : 95);
 }
 
 function applyTheme(theme) {
@@ -135,15 +136,25 @@ function applyLanguage() {
   });
   localStorage.setItem('lang', currentLang);
   langToggle.textContent = currentLang === 'de' ? 'EN' : 'DE';
+  langToggle.setAttribute(
+    'aria-label',
+    currentLang === 'de' ? 'Zu Englisch wechseln' : 'Switch to German'
+  );
 }
 
 function resetTypewriter() {
+  clearTimeout(typewriterTimeoutId);
   roleIndex = 0;
   charIndex = 0;
   isDeleting = false;
   if (roleEl) {
     roleEl.textContent = '';
   }
+}
+
+function startTypewriter() {
+  resetTypewriter();
+  typeRole();
 }
 
 function setupReveal() {
@@ -192,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   langToggle?.addEventListener('click', () => {
     currentLang = currentLang === 'de' ? 'en' : 'de';
     applyLanguage();
-    resetTypewriter();
+    startTypewriter();
   });
 
   const preferredTheme = localStorage.getItem('theme') || 'light';
@@ -201,5 +212,5 @@ document.addEventListener('DOMContentLoaded', () => {
   setupReveal();
   setupMouseReactiveBg();
   setTimeout(() => nameEl?.classList.add('ready'), 120);
-  typeRole();
+  startTypewriter();
 });

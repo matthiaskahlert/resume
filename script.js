@@ -75,6 +75,7 @@ const i18nJson = `
 
 const translations = JSON.parse(i18nJson);
 const DEFAULT_LANG = 'de';
+const SUPPORTED_LANGS = ['de', 'en'];
 
 let nameEl;
 let roleEl;
@@ -91,7 +92,8 @@ const rolesByLang = {
 let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
-let currentLang = localStorage.getItem('lang') || DEFAULT_LANG;
+const storedLang = localStorage.getItem('lang');
+let currentLang = SUPPORTED_LANGS.includes(storedLang) ? storedLang : DEFAULT_LANG;
 let currentRoles = rolesByLang[currentLang];
 let typewriterTimeoutId;
 

@@ -74,6 +74,7 @@ const i18nJson = `
 `;
 
 const translations = JSON.parse(i18nJson);
+const DEFAULT_LANG = 'de';
 
 let nameEl;
 let roleEl;
@@ -90,7 +91,7 @@ const rolesByLang = {
 let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
-let currentLang = localStorage.getItem('lang') || 'de';
+let currentLang = localStorage.getItem('lang') || DEFAULT_LANG;
 let currentRoles = rolesByLang[currentLang];
 let typewriterTimeoutId;
 
@@ -129,7 +130,7 @@ function t(key) {
 }
 
 function applyLanguage() {
-  currentRoles = rolesByLang[currentLang] || rolesByLang.de;
+  currentRoles = rolesByLang[currentLang] || rolesByLang[DEFAULT_LANG];
   document.documentElement.lang = currentLang;
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);

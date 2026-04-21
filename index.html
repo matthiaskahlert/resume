@@ -81,21 +81,53 @@
         <div class="container">
           <h2 data-i18n="services.title">Services</h2>
           <div class="cards">
-            <article class="card">
+            <article class="card service-trigger" data-service="s1" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">🏆</div>
               <h3 data-i18n="services.s1.title">QA Leadership</h3>
               <p data-i18n="services.s1.text">Aufbau von QA-Prozessen, Teststrategie und Team-Guidance.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
             </article>
-            <article class="card">
+            <article class="card service-trigger" data-service="s2" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">📊</div>
               <h3 data-i18n="services.s2.title">Test Management</h3>
               <p data-i18n="services.s2.text">Planung, Priorisierung und Absicherung von Releases.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
             </article>
-            <article class="card">
+            <article class="card service-trigger" data-service="s3" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">🔬</div>
               <h3 data-i18n="services.s3.title">Quality Consulting</h3>
               <p data-i18n="services.s3.text">Audit bestehender Prozesse und Einführung nachhaltiger Qualitätsmetriken.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
             </article>
           </div>
         </div>
       </section>
+
+      <!-- Service slide-in panels -->
+      <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+      <aside class="service-panel" id="servicePanel" role="dialog" aria-modal="true" aria-hidden="true">
+        <button class="panel-close" id="panelClose" aria-label="Panel schließen">✕</button>
+        <div class="panel-icon" id="panelIcon"></div>
+        <h2 class="panel-title" id="panelTitle"></h2>
+        <div class="panel-body" id="panelBody"></div>
+      </aside>
+
+      <!-- Terminal Easter Egg -->
+      <div class="terminal-overlay" id="terminalOverlay" aria-hidden="true"></div>
+      <div class="terminal" id="terminal" role="dialog" aria-label="Terminal" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#ff5f56"></span>
+          <span class="terminal-dot" style="background:#ffbd2e"></span>
+          <span class="terminal-dot" style="background:#27c93f"></span>
+          <span class="terminal-title">matthias@portfolio:~</span>
+          <button class="terminal-x" id="terminalClose" aria-label="Terminal schließen">✕</button>
+        </div>
+        <div class="terminal-output" id="terminalOutput" aria-live="polite"></div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt">$</span>
+          <input class="terminal-input" id="terminalInput" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal Eingabe" />
+        </div>
+      </div>
 
       <section class="section reveal" id="projects">
         <div class="container">

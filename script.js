@@ -20,6 +20,7 @@ const i18nJson = `
     "services.s2.text": "Planung, Priorisierung und Absicherung von Releases.",
     "services.s3.title": "Quality Consulting",
     "services.s3.text": "Audit bestehender Prozesse und Einführung nachhaltiger Qualitätsmetriken.",
+    "services.more": "Mehr erfahren →",
     "projects.title": "Projekte",
     "projects.p1.title": "Release Quality Dashboard",
     "projects.p1.text": "Transparente Qualitätsmetriken für produktionsreife Releases.",
@@ -55,6 +56,7 @@ const i18nJson = `
     "services.s2.text": "Planning, prioritization and release quality coverage.",
     "services.s3.title": "Quality Consulting",
     "services.s3.text": "Auditing existing workflows and introducing practical quality metrics.",
+    "services.more": "Learn more →",
     "projects.title": "Projects",
     "projects.p1.title": "Release Quality Dashboard",
     "projects.p1.text": "Transparent quality metrics for production-ready releases.",
@@ -214,6 +216,279 @@ document.addEventListener('DOMContentLoaded', () => {
   applyLanguage();
   setupReveal();
   setupMouseReactiveBg();
+  setupServicePanels();
+  setupTerminal();
   setTimeout(() => nameEl?.classList.add('ready'), 120);
   startTypewriter();
 });
+
+/* ── Service slide-in panels ─────────────────────── */
+
+const servicePanelData = {
+  de: {
+    s1: {
+      icon: '🏆',
+      title: 'QA Leadership',
+      body: `
+        <p>Als QA Lead begleite ich Teams vom ersten Planungsmeeting bis zum Release-Freeze – mit klarer Strategie, messbaren Zielen und einer Fehlerkultur, die Qualität als gemeinsame Verantwortung versteht.</p>
+        <ul>
+          <li>Aufbau und Skalierung von QA-Teams</li>
+          <li>Definition von Teststrategien und DoD-Kriterien</li>
+          <li>Coaching und Mentoring von Junior Testern</li>
+          <li>Einführung risikobasierter Testansätze</li>
+          <li>KPI-gestützte Qualitätsberichterstattung</li>
+        </ul>
+      `
+    },
+    s2: {
+      icon: '📊',
+      title: 'Test Management',
+      body: `
+        <p>Strukturiertes Test Management sorgt dafür, dass Releases termingerecht und qualitätsgesichert ausgeliefert werden – ohne Überraschungen im letzten Moment.</p>
+        <ul>
+          <li>Test- und Releaseplanung nach Agile und Waterfall</li>
+          <li>Priorisierung von Testfällen nach Risiko und Impact</li>
+          <li>Integration in CI/CD-Pipelines</li>
+          <li>Stakeholder-Reporting und Eskalationsmanagement</li>
+          <li>Defect Lifecycle Management via Jira</li>
+        </ul>
+      `
+    },
+    s3: {
+      icon: '🔬',
+      title: 'Quality Consulting',
+      body: `
+        <p>Ich analysiere bestehende Prozesse und zeige pragmatische Verbesserungen auf – ohne großen Overhead, mit nachhaltigem Effekt auf Produkt- und Teamqualität.</p>
+        <ul>
+          <li>Prozess-Audit und Gap-Analyse</li>
+          <li>Einführung von Qualitätsmetriken und Dashboards</li>
+          <li>Test-Automatisierungsberatung</li>
+          <li>Exploratory-Testing-Frameworks</li>
+          <li>Wissenssicherung und Dokumentation</li>
+        </ul>
+      `
+    }
+  },
+  en: {
+    s1: {
+      icon: '🏆',
+      title: 'QA Leadership',
+      body: `
+        <p>As a QA Lead I guide teams from initial planning through release freeze — with clear strategy, measurable goals and a quality culture that treats testing as a shared responsibility.</p>
+        <ul>
+          <li>Building and scaling QA teams</li>
+          <li>Defining test strategies and Definition of Done criteria</li>
+          <li>Coaching and mentoring junior testers</li>
+          <li>Introducing risk-based testing approaches</li>
+          <li>KPI-driven quality reporting</li>
+        </ul>
+      `
+    },
+    s2: {
+      icon: '📊',
+      title: 'Test Management',
+      body: `
+        <p>Structured test management ensures releases ship on time with quality baked in — no last-minute surprises.</p>
+        <ul>
+          <li>Test and release planning (Agile and Waterfall)</li>
+          <li>Prioritization of test cases by risk and impact</li>
+          <li>Integration into CI/CD pipelines</li>
+          <li>Stakeholder reporting and escalation management</li>
+          <li>Defect lifecycle management via Jira</li>
+        </ul>
+      `
+    },
+    s3: {
+      icon: '🔬',
+      title: 'Quality Consulting',
+      body: `
+        <p>I analyse existing processes and identify pragmatic improvements — low overhead, lasting impact on product and team quality.</p>
+        <ul>
+          <li>Process audit and gap analysis</li>
+          <li>Introducing quality metrics and dashboards</li>
+          <li>Test automation advisory</li>
+          <li>Exploratory testing frameworks</li>
+          <li>Knowledge management and documentation</li>
+        </ul>
+      `
+    }
+  }
+};
+
+function setupServicePanels() {
+  const overlay = document.getElementById('panelOverlay');
+  const panel = document.getElementById('servicePanel');
+  const panelClose = document.getElementById('panelClose');
+  const panelIcon = document.getElementById('panelIcon');
+  const panelTitle = document.getElementById('panelTitle');
+  const panelBody = document.getElementById('panelBody');
+
+  function openPanel(serviceKey) {
+    const data = servicePanelData[currentLang]?.[serviceKey] || servicePanelData.de[serviceKey];
+    if (!data) {
+      return;
+    }
+    panelIcon.textContent = data.icon;
+    panelTitle.textContent = data.title;
+    panelBody.innerHTML = data.body;
+    overlay.classList.add('open');
+    panel.classList.add('open');
+    panel.removeAttribute('aria-hidden');
+    panelClose.focus();
+  }
+
+  function closePanel() {
+    overlay.classList.remove('open');
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  document.querySelectorAll('.service-trigger').forEach((card) => {
+    card.addEventListener('click', () => openPanel(card.dataset.service));
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPanel(card.dataset.service);
+      }
+    });
+  });
+
+  overlay.addEventListener('click', closePanel);
+  panelClose.addEventListener('click', closePanel);
+  panel.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closePanel();
+    }
+  });
+}
+
+/* ── Terminal Easter Egg ─────────────────────────── */
+
+const terminalCommands = {
+  help: () => `<span class="t-accent">Verfügbare Befehle:</span>
+  help        Diese Hilfe anzeigen
+  whoami      Über Matthias Kahlert
+  skills      Technische Fähigkeiten
+  experience  Berufserfahrung
+  contact     Kontaktdaten
+  clear       Terminal leeren
+  exit        Terminal schließen`,
+
+  whoami: () => `<span class="t-accent">Matthias Kahlert</span>
+  Senior QA Engineer / QA Lead / Test Manager
+  10+ Jahre Erfahrung · Games Industry · Release Management
+  Fokus: Exploratory Testing, API Testing, Qualitätssicherung`,
+
+  skills: () => `<span class="t-accent">[ Skills ]</span>
+  JavaScript  ████████░░  80%
+  SQL         ███████░░░  70%
+  Python      █████░░░░░  50%
+  Selenium    ████████░░  80%
+  Jira        █████████░  90%
+  CI/CD       ███████░░░  70%`,
+
+  experience: () => `<span class="t-accent">[ Experience ]</span>
+  ● Senior QA Engineer  — Games Industry
+  ● QA Lead             — Teameinstieg & Prozessgestaltung
+  ● Test Manager        — Release Management & Stakeholder`,
+
+  contact: () => `<span class="t-accent">[ Kontakt ]</span>
+  LinkedIn: linkedin.com/in/matthias-kahlert/
+  Tipp: Drücke Ctrl+C oder tippe 'exit' zum Schließen.`,
+
+  clear: (outputEl) => {
+    outputEl.innerHTML = '';
+    return null;
+  },
+
+  exit: (outputEl, closeFn) => {
+    closeFn();
+    return null;
+  }
+};
+
+function setupTerminal() {
+  const overlay = document.getElementById('terminalOverlay');
+  const terminal = document.getElementById('terminal');
+  const terminalClose = document.getElementById('terminalClose');
+  const outputEl = document.getElementById('terminalOutput');
+  const inputEl = document.getElementById('terminalInput');
+
+  const KONAMI = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'b', 'a'
+  ];
+  let konamiIndex = 0;
+
+  function printLine(html) {
+    const line = document.createElement('div');
+    line.innerHTML = html;
+    outputEl.appendChild(line);
+    outputEl.scrollTop = outputEl.scrollHeight;
+  }
+
+  function openTerminal() {
+    overlay.classList.add('open');
+    terminal.classList.add('open');
+    terminal.removeAttribute('aria-hidden');
+    outputEl.innerHTML = '';
+    printLine(`<span class="t-accent">🚀 Willkommen im Matthias-Kahlert-Terminal!</span>`);
+    printLine(`Tippe <span class="t-accent">help</span> für verfügbare Befehle.`);
+    inputEl.focus();
+  }
+
+  function closeTerminal() {
+    overlay.classList.remove('open');
+    terminal.classList.remove('open');
+    terminal.setAttribute('aria-hidden', 'true');
+    konamiIndex = 0;
+  }
+
+  function handleCommand(raw) {
+    const cmd = raw.trim().toLowerCase();
+    if (!cmd) {
+      return;
+    }
+    printLine(`<span class="t-accent">$</span> ${raw.trim()}`);
+    const handler = terminalCommands[cmd];
+    if (!handler) {
+      printLine(`<span class="t-err">Unbekannter Befehl: ${raw.trim()}. Tippe 'help'.</span>`);
+      return;
+    }
+    const result = handler(outputEl, closeTerminal);
+    if (result !== null && result !== undefined) {
+      printLine(result);
+    }
+  }
+
+  inputEl.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const val = inputEl.value;
+      inputEl.value = '';
+      handleCommand(val);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const expected = KONAMI[konamiIndex];
+    if (event.key === expected) {
+      konamiIndex += 1;
+      if (konamiIndex === KONAMI.length) {
+        konamiIndex = 0;
+        openTerminal();
+      }
+    } else {
+      konamiIndex = event.key === KONAMI[0] ? 1 : 0;
+    }
+  });
+
+  terminal.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeTerminal();
+    }
+  });
+
+  overlay.addEventListener('click', closeTerminal);
+  terminalClose.addEventListener('click', closeTerminal);
+}

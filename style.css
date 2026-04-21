@@ -303,6 +303,220 @@ body {
   transform: translateY(0);
 }
 
+/* ── Service card extras ─────────────────────────── */
+.card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-more {
+  display: inline-block;
+  margin-top: 0.6rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.service-trigger {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-trigger:hover,
+.service-trigger:focus-visible {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 36px rgba(29, 191, 176, 0.2);
+  outline: none;
+}
+
+/* ── Panel overlay & slide-in panel ─────────────── */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.panel-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.service-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: min(100%, 420px);
+  z-index: 20;
+  background: var(--surface);
+  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.25);
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-panel.open {
+  transform: translateX(0);
+}
+
+.panel-close {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  float: right;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+}
+
+.panel-icon {
+  font-size: 2.5rem;
+  margin: 1rem 0 0.4rem;
+  clear: both;
+}
+
+.panel-title {
+  margin: 0 0 0.8rem;
+  font-size: 1.4rem;
+}
+
+.panel-body {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.panel-body ul {
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.panel-body li + li {
+  margin-top: 0.4rem;
+}
+
+/* ── Terminal Easter Egg ─────────────────────────── */
+.terminal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.terminal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.terminal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 30;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  width: min(90vw, 640px);
+  border-radius: 0.7rem;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  background: #1a1e24;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  background: #2c2f36;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  color: #8a9099;
+  font-size: 0.8rem;
+}
+
+.terminal-x {
+  border: 0;
+  background: transparent;
+  color: #8a9099;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.terminal-output {
+  padding: 1rem;
+  color: #c8d3dd;
+  font-size: 0.85rem;
+  min-height: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.terminal-output .t-accent {
+  color: #1dbfb0;
+}
+
+.terminal-output .t-warn {
+  color: #ffbd2e;
+}
+
+.terminal-output .t-err {
+  color: #ff5f56;
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 1rem 0.8rem;
+  border-top: 1px solid #2c2f36;
+}
+
+.terminal-prompt {
+  color: #1dbfb0;
+  font-size: 0.85rem;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: #c8d3dd;
+  font-size: 0.85rem;
+  font-family: inherit;
+  caret-color: #1dbfb0;
+}
+
 @media (min-width: 760px) {
   .nav-toggle {
     display: none;

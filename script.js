@@ -75,7 +75,13 @@ const i18nJson = `
 }
 `;
 
-const translations = JSON.parse(i18nJson);
+let translations;
+try {
+  translations = JSON.parse(i18nJson);
+} catch {
+  console.error('i18n JSON konnte nicht geparst werden. Fallback auf leeres Objekt.');
+  translations = { de: {}, en: {} };
+}
 const DEFAULT_LANG = 'de';
 const SUPPORTED_LANGS = ['de', 'en'];
 
@@ -326,6 +332,7 @@ function setupServicePanels() {
   function openPanel(serviceKey) {
     const data = servicePanelData[currentLang]?.[serviceKey] || servicePanelData.de[serviceKey];
     if (!data) {
+      console.error(`Unbekannter Service-Schlüssel: "${serviceKey}"`);
       return;
     }
     panelIcon.textContent = data.icon;
@@ -364,8 +371,21 @@ function setupServicePanels() {
 
 /* ── Terminal Easter Egg ─────────────────────────── */
 
-const terminalCommands = {
-  help: () => `<span class="t-accent">Verfügbare Befehle:</span>
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const terminalStrings = {
+  de: {
+    welcome: '🚀 Willkommen im Matthias-Kahlert-Terminal!',
+    helpHint: "Tippe <span class=\"t-accent\">help</span> für verfügbare Befehle.",
+    unknown: (cmd) => `Unbekannter Befehl: ${escapeHtml(cmd)}. Tippe 'help'.`,
+    help: `<span class="t-accent">Verfügbare Befehle:</span>
   help        Diese Hilfe anzeigen
   whoami      Über Matthias Kahlert
   skills      Technische Fähigkeiten
@@ -373,39 +393,61 @@ const terminalCommands = {
   contact     Kontaktdaten
   clear       Terminal leeren
   exit        Terminal schließen`,
-
-  whoami: () => `<span class="t-accent">Matthias Kahlert</span>
+    whoami: `<span class="t-accent">Matthias Kahlert</span>
   Senior QA Engineer / QA Lead / Test Manager
   10+ Jahre Erfahrung · Games Industry · Release Management
   Fokus: Exploratory Testing, API Testing, Qualitätssicherung`,
-
-  skills: () => `<span class="t-accent">[ Skills ]</span>
+    skills: `<span class="t-accent">[ Skills ]</span>
   JavaScript  ████████░░  80%
   SQL         ███████░░░  70%
   Python      █████░░░░░  50%
   Selenium    ████████░░  80%
   Jira        █████████░  90%
   CI/CD       ███████░░░  70%`,
-
-  experience: () => `<span class="t-accent">[ Experience ]</span>
+    experience: `<span class="t-accent">[ Erfahrung ]</span>
   ● Senior QA Engineer  — Games Industry
   ● QA Lead             — Teameinstieg & Prozessgestaltung
   ● Test Manager        — Release Management & Stakeholder`,
-
-  contact: () => `<span class="t-accent">[ Kontakt ]</span>
+    contact: `<span class="t-accent">[ Kontakt ]</span>
   LinkedIn: linkedin.com/in/matthias-kahlert/
-  Tipp: Drücke Ctrl+C oder tippe 'exit' zum Schließen.`,
-
-  clear: (outputEl) => {
-    outputEl.innerHTML = '';
-    return null;
+  Tipp: Drücke Escape oder tippe 'exit' zum Schließen.`
   },
-
-  exit: (outputEl, closeFn) => {
-    closeFn();
-    return null;
+  en: {
+    welcome: '🚀 Welcome to the Matthias Kahlert Terminal!',
+    helpHint: "Type <span class=\"t-accent\">help</span> for available commands.",
+    unknown: (cmd) => `Unknown command: ${escapeHtml(cmd)}. Type 'help'.`,
+    help: `<span class="t-accent">Available commands:</span>
+  help        Show this help
+  whoami      About Matthias Kahlert
+  skills      Technical skills
+  experience  Work experience
+  contact     Contact details
+  clear       Clear terminal
+  exit        Close terminal`,
+    whoami: `<span class="t-accent">Matthias Kahlert</span>
+  Senior QA Engineer / QA Lead / Test Manager
+  10+ years experience · Games Industry · Release Management
+  Focus: Exploratory Testing, API Testing, Quality Assurance`,
+    skills: `<span class="t-accent">[ Skills ]</span>
+  JavaScript  ████████░░  80%
+  SQL         ███████░░░  70%
+  Python      █████░░░░░  50%
+  Selenium    ████████░░  80%
+  Jira        █████████░  90%
+  CI/CD       ███████░░░  70%`,
+    experience: `<span class="t-accent">[ Experience ]</span>
+  ● Senior QA Engineer  — Games Industry
+  ● QA Lead             — Team building & process design
+  ● Test Manager        — Release Management & Stakeholders`,
+    contact: `<span class="t-accent">[ Contact ]</span>
+  LinkedIn: linkedin.com/in/matthias-kahlert/
+  Tip: Press Escape or type 'exit' to close.`
   }
 };
+
+function getTerminalStr() {
+  return terminalStrings[currentLang] || terminalStrings.de;
+}
 
 function setupTerminal() {
   const overlay = document.getElementById('terminalOverlay');
@@ -429,12 +471,13 @@ function setupTerminal() {
   }
 
   function openTerminal() {
+    const s = getTerminalStr();
     overlay.classList.add('open');
     terminal.classList.add('open');
     terminal.removeAttribute('aria-hidden');
     outputEl.innerHTML = '';
-    printLine(`<span class="t-accent">🚀 Willkommen im Matthias-Kahlert-Terminal!</span>`);
-    printLine(`Tippe <span class="t-accent">help</span> für verfügbare Befehle.`);
+    printLine(`<span class="t-accent">${escapeHtml(s.welcome)}</span>`);
+    printLine(s.helpHint);
     inputEl.focus();
   }
 
@@ -450,15 +493,20 @@ function setupTerminal() {
     if (!cmd) {
       return;
     }
-    printLine(`<span class="t-accent">$</span> ${raw.trim()}`);
-    const handler = terminalCommands[cmd];
-    if (!handler) {
-      printLine(`<span class="t-err">Unbekannter Befehl: ${raw.trim()}. Tippe 'help'.</span>`);
+    const s = getTerminalStr();
+    printLine(`<span class="t-accent">$</span> ${escapeHtml(raw.trim())}`);
+    if (cmd === 'clear') {
+      outputEl.innerHTML = '';
       return;
     }
-    const result = handler(outputEl, closeTerminal);
-    if (result !== null && result !== undefined) {
-      printLine(result);
+    if (cmd === 'exit') {
+      closeTerminal();
+      return;
+    }
+    if (Object.prototype.hasOwnProperty.call(s, cmd) && typeof s[cmd] === 'string') {
+      printLine(s[cmd]);
+    } else {
+      printLine(`<span class="t-err">${s.unknown(raw.trim())}</span>`);
     }
   }
 

@@ -349,6 +349,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
+  height: 100vh;
   height: 100dvh;
   width: min(100%, 420px);
   z-index: 20;

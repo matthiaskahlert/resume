@@ -337,6 +337,7 @@ function setupServicePanels() {
     }
     panelIcon.textContent = data.icon;
     panelTitle.textContent = data.title;
+    // data.body is static HTML defined in servicePanelData — no user input involved.
     panelBody.innerHTML = data.body;
     overlay.classList.add('open');
     panel.classList.add('open');
@@ -476,7 +477,7 @@ function setupTerminal() {
     terminal.classList.add('open');
     terminal.removeAttribute('aria-hidden');
     outputEl.innerHTML = '';
-    printLine(`<span class="t-accent">${escapeHtml(s.welcome)}</span>`);
+    printLine(`<span class="t-accent">${s.welcome}</span>`);
     printLine(s.helpHint);
     inputEl.focus();
   }

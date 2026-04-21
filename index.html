@@ -1,3 +1,195 @@
----
-layout: resume
----
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio von Matthias Kahlert – Senior QA Engineer, QA Lead und Test Manager."
+    />
+    <title>Matthias Kahlert | QA Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="mouse-bg" aria-hidden="true"></div>
+
+    <header class="site-header" id="top">
+      <nav class="nav container">
+        <a class="brand" href="#top">MK</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">☰</button>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#about" data-i18n="nav.about">About</a></li>
+          <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+          <li><a href="#services" data-i18n="nav.services">Services</a></li>
+          <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="#experience" data-i18n="nav.experience">Experience</a></li>
+          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+        <div class="controls">
+          <button id="langToggle" class="control-btn" aria-label="Zu Englisch wechseln">EN</button>
+          <button id="themeToggle" class="control-btn" aria-label="Dark Mode umschalten">🌙</button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero reveal" id="hero">
+        <div class="container hero-content">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Portfolio</p>
+          <h1 class="hero-name" id="heroName">Matthias Kahlert</h1>
+          <p class="hero-role" id="roleTypewriter" aria-live="polite"></p>
+          <p class="hero-text" data-i18n="hero.text">
+            Senior QA Engineer mit 10+ Jahren Erfahrung in QA, Games Industry und Release Management.
+          </p>
+          <a class="btn btn-primary" href="#projects" data-i18n="hero.cta">Projekte ansehen</a>
+        </div>
+      </section>
+
+      <section class="section reveal" id="about">
+        <div class="container">
+          <h2 data-i18n="about.title">Über mich</h2>
+          <p data-i18n="about.text">
+            Ich unterstütze Teams dabei, Qualität frühzeitig in Produkte zu integrieren – mit Fokus auf Exploratory
+            Testing, API Testing und strukturierte Qualitätssicherung.
+          </p>
+        </div>
+      </section>
+
+      <section class="section reveal" id="skills">
+        <div class="container">
+          <h2 data-i18n="skills.title">Skills</h2>
+          <div class="skills-grid">
+            <article class="skill-card"><span>🟨</span><p>JavaScript</p></article>
+            <article class="skill-card"><span>🗄️</span><p>SQL</p></article>
+            <article class="skill-card"><span>🐍</span><p>Python (basic)</p></article>
+            <article class="skill-card"><span>🧪</span><p>Selenium</p></article>
+            <article class="skill-card"><span>📋</span><p>Jira</p></article>
+            <article class="skill-card"><span>⚙️</span><p>CI/CD</p></article>
+            <article class="skill-card"><span>🔎</span><p>Exploratory Testing</p></article>
+            <article class="skill-card"><span>🔌</span><p>API Testing</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="services">
+        <div class="container">
+          <h2 data-i18n="services.title">Services</h2>
+          <div class="cards">
+            <article class="card service-trigger" data-service="s1" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">🏆</div>
+              <h3 data-i18n="services.s1.title">QA Leadership</h3>
+              <p data-i18n="services.s1.text">Aufbau von QA-Prozessen, Teststrategie und Team-Guidance.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
+            </article>
+            <article class="card service-trigger" data-service="s2" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">📊</div>
+              <h3 data-i18n="services.s2.title">Test Management</h3>
+              <p data-i18n="services.s2.text">Planung, Priorisierung und Absicherung von Releases.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
+            </article>
+            <article class="card service-trigger" data-service="s3" role="button" tabindex="0" aria-haspopup="dialog">
+              <div class="card-icon">🔬</div>
+              <h3 data-i18n="services.s3.title">Quality Consulting</h3>
+              <p data-i18n="services.s3.text">Audit bestehender Prozesse und Einführung nachhaltiger Qualitätsmetriken.</p>
+              <span class="card-more" data-i18n="services.more">Mehr erfahren →</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service slide-in panels -->
+      <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+      <aside class="service-panel" id="servicePanel" role="dialog" aria-modal="true" aria-hidden="true">
+        <button class="panel-close" id="panelClose" aria-label="Panel schließen">✕</button>
+        <div class="panel-icon" id="panelIcon"></div>
+        <h2 class="panel-title" id="panelTitle"></h2>
+        <div class="panel-body" id="panelBody"></div>
+      </aside>
+
+      <!-- Terminal Easter Egg -->
+      <div class="terminal-overlay" id="terminalOverlay" aria-hidden="true"></div>
+      <div class="terminal" id="terminal" role="dialog" aria-label="Terminal" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#ff5f56"></span>
+          <span class="terminal-dot" style="background:#ffbd2e"></span>
+          <span class="terminal-dot" style="background:#27c93f"></span>
+          <span class="terminal-title">matthias@portfolio:~</span>
+          <button class="terminal-x" id="terminalClose" aria-label="Terminal schließen">✕</button>
+        </div>
+        <div class="terminal-output" id="terminalOutput" aria-live="polite"></div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt">$</span>
+          <input class="terminal-input" id="terminalInput" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal Eingabe" />
+        </div>
+      </div>
+
+      <section class="section reveal" id="projects">
+        <div class="container">
+          <h2 data-i18n="projects.title">Projekte</h2>
+          <div class="projects-scroll" role="list">
+            <article class="project-card" role="listitem">
+              <img src="/images/screenshot.png" alt="Release Quality Dashboard" loading="lazy" />
+              <div class="project-body">
+                <h3 data-i18n="projects.p1.title">Release Quality Dashboard</h3>
+                <p data-i18n="projects.p1.text">Transparente Qualitätsmetriken für produktionsreife Releases.</p>
+                <p class="stack">Stack: JavaScript, SQL, Jira API</p>
+              </div>
+            </article>
+            <article class="project-card" role="listitem">
+              <img src="/images/matthias-kahlert.jpg" alt="API Test Automation" loading="lazy" />
+              <div class="project-body">
+                <h3 data-i18n="projects.p2.title">API Test Automation</h3>
+                <p data-i18n="projects.p2.text">Automatisierte API-Regression mit stabilem CI-Feedback.</p>
+                <p class="stack">Stack: JavaScript, CI/CD, REST</p>
+              </div>
+            </article>
+            <article class="project-card" role="listitem">
+              <img src="/images/avatar.jpg" alt="Exploratory Testing Framework" loading="lazy" />
+              <div class="project-body">
+                <h3 data-i18n="projects.p3.title">Exploratory Testing Framework</h3>
+                <p data-i18n="projects.p3.text">Leitfaden und Sessions für effizientes, risikobasiertes Testen.</p>
+                <p class="stack">Stack: Jira, Test Management, QA Playbooks</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="experience">
+        <div class="container">
+          <h2 data-i18n="experience.title">Experience</h2>
+          <div class="timeline">
+            <article>
+              <h3>Senior QA Engineer</h3>
+              <p data-i18n="experience.e1">Verantwortlich für End-to-End Qualitätssicherung in der Games Industry.</p>
+            </article>
+            <article>
+              <h3>QA Lead</h3>
+              <p data-i18n="experience.e2">Leitung von QA-Initiativen, Coaching und Prozessverbesserung.</p>
+            </article>
+            <article>
+              <h3>Test Manager</h3>
+              <p data-i18n="experience.e3">Release Management, Testplanung und Stakeholder-Kommunikation.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="contact">
+        <div class="container">
+          <h2 data-i18n="contact.title">Contact</h2>
+          <p data-i18n="contact.text">Lass uns über Qualität, Testing und stabile Releases sprechen.</p>
+          <a class="btn" href="https://www.linkedin.com/in/matthias-kahlert/" target="_blank" rel="noopener noreferrer" data-i18n="contact.cta">Kontakt aufnehmen</a>
+        </div>
+      </section>
+    </main>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
